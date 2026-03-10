@@ -13,7 +13,7 @@ export class AuthService {
     ) {}
 
     private async validateUser(loginDto: LoginDto) {
-        const existUser = await this.usersService.findOneByEmail(loginDto.email);
+        const existUser = await this.usersService.findOneByPhone(loginDto.phone);
         if(!existUser) throw new NotFoundException('Người dùng không tồn tại');
 
         const isPasswordCorrect = await compare(loginDto.password, existUser.password);
@@ -24,9 +24,9 @@ export class AuthService {
 
     async login(loginDto: LoginDto) {
         const user = await this.validateUser(loginDto);
-        const payload: AuthJwtPayload = {sub: user.id, email: user.email, role: user.role};
+        const payload: AuthJwtPayload = {sub: user.id, phone: user.phone, role: user.role};
         return { 
-            username: user.name,
+            username: user.profile?.bio,
             access_token: await this.jwtService.signAsync(payload)
         };
     }

@@ -1,5 +1,5 @@
 export type AuthJwtPayload = {
     sub: number,
-    email: string,
+    phone: phone,
     role: string
 }

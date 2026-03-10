@@ -12,12 +12,12 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const existUser = await this.prisma.user.findUnique({
       where: {
-        email: createUserDto.email
+        phone: createUserDto.phone
       }
     })
 
     if(existUser){
-      throw new ConflictException("Người dùng với email đã tồn tại")
+      throw new ConflictException("Người dùng với số điện thoại đã tồn tại")
     }
 
     const hashPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -26,10 +26,14 @@ export class UserService {
     try{
       newUser = await this.prisma.user.create({
         data: {
-          name: createUserDto.name,
-          email: createUserDto.email,
+          phone: createUserDto.phone,
           password: hashPassword,
-          role: createUserDto.role
+          role: createUserDto.role,
+          profile: {
+            create: {
+              bio: createUserDto.phone
+            }
+          }
         }
       })
       
@@ -48,7 +52,7 @@ export class UserService {
   async findAll() {
     return await this.prisma.user.findMany({
       select: {
-        email: true,
+        phone: true,
         role: true,
         status: true
       }
@@ -59,10 +63,17 @@ export class UserService {
     return `This action returns a #${id} user`;
   }
 
-  findOneByEmail(email: string){
+  findOneByPhone(phone: string){
     return this.prisma.user.findFirst({
       where: {
-        email: email
+        phone: phone
+      },
+      include: {
+        profile: {
+          select: {
+            bio: true
+          }
+        }
       }
     })
   }
@@ -73,7 +84,7 @@ export class UserService {
         id: id
       },
       select: {
-        email: true,
+        phone: true,
         role: true,
         status: true
       }
@@ -85,11 +96,8 @@ export class UserService {
 
     let newUser = {};
 
-    if(updateUserDto.email){
-      newUser['email'] = updateUserDto.email;
-    }
-    if(updateUserDto.name){
-      newUser['name'] = updateUserDto.name;
+    if(updateUserDto.phone){
+      newUser['phone'] = updateUserDto.phone;
     }
     if(updateUserDto.password){
       newUser['password'] = updateUserDto.password;
