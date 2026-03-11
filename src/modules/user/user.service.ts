@@ -4,6 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Role, Status, User } from 'src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
+
 
 @Injectable()
 export class UserService {
@@ -26,11 +28,14 @@ export class UserService {
     try{
       newUser = await this.prisma.user.create({
         data: {
+          uuid: uuidv4(),
           phone: createUserDto.phone,
+          email: createUserDto.email,
           password: hashPassword,
           role: createUserDto.role,
           profile: {
             create: {
+              uuid: uuidv4(),
               bio: createUserDto.phone
             }
           }
@@ -54,7 +59,6 @@ export class UserService {
       select: {
         phone: true,
         role: true,
-        status: true
       }
     });
   }
@@ -86,7 +90,6 @@ export class UserService {
       select: {
         phone: true,
         role: true,
-        status: true
       }
     });
 
@@ -119,12 +122,14 @@ export class UserService {
   }
 
   async remove(id: number) {
+    const deletedAt = new Date();
+
     return await this.prisma.user.update({
       where: {
         id: id
       },
       data: {
-        status: Status.INACTIVE
+        deletedAt: deletedAt
       }
     })
   }

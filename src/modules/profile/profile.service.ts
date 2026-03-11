@@ -51,23 +51,15 @@ export class ProfileService {
     newProfile['avatar'] = imageUrl;
 
     try {
-      await Promise.all([
-        this.prisma.profile.update({
+        await this.prisma.profile.update({
           where: {
             id: id
           },
           data: {
             ...newProfile
           }
-        }),
-
-        this.prisma.image.create({
-          data: {
-            url: url
-          }
         })
-      ])
-
+        
       return {
         message: "Cap nhat ho so thanh cong"
       }

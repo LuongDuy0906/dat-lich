@@ -3,10 +3,14 @@ import { Role } from "src/generated/prisma/enums";
 
 export class CreateUserDto {
     @IsNotEmpty()
-    phone!: string
+    @IsEmail()
+    email!: string;
 
     @IsNotEmpty()
-    password!: string
+    phone!: string;
+
+    @IsNotEmpty()
+    password!: string;
 
     @IsEnum(Role)
     role!: Role;
