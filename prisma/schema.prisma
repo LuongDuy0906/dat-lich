@@ -15,20 +15,31 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  phone    String   @unique
-  password String
-  role     Role     @default(USER)
-  status   Status   @default(ACTIVE)
-  profile  Profile?
+  id        Int      @id @default(autoincrement())
+  phone     String   @unique
+  password  String
+  role      Role     @default(USER)
+  status    Status   @default(ACTIVE)
+  profile   Profile?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  avatar String?
-  userId Int     @unique
-  user   User    @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
+  bio       String?
+  avatar    String?
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {

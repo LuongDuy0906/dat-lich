@@ -1,10 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/common/file-upload.utils';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles/roles.guard';
+import { Role } from 'src/generated/prisma/enums';
+import { Roles } from '../auth/decorators/role.decorator';
 
 @Controller('profile')
 export class ProfileController {
@@ -25,7 +29,16 @@ export class ProfileController {
     return this.profileService.findOne(+id);
   }
 
+  @Get('user/:userId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.USER)
+  findOneByUserId(@Param('userId') userId: string){
+    return this.profileService.findOneByUserId(+userId);
+  }
+
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.USER)
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
       destination: './uploads/products',
@@ -33,7 +46,6 @@ export class ProfileController {
     }),
     fileFilter: imageFileFilter,
   }))
-
   update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto, @UploadedFile() file: Express.Multer.File) {
     const imageUrl = `/uploads/products/${file.filename}`;
     return this.profileService.update(+id, updateProfileDto, imageUrl);
