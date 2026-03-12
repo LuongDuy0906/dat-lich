@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Profile } from 'src/generated/prisma/client';
 
 @Injectable()
 export class ProfileService {
@@ -12,8 +11,17 @@ export class ProfileService {
     return 'This action adds a new profile';
   }
 
-  findAll() {
-    return `This action returns all profile`;
+  async findAll() {
+    return await this.prisma.profile.findMany({
+      select: {
+        uuid: true,
+        bio: true,
+        avatar: true,
+        address: true,
+        birth_date: true,
+        gender: true
+      }
+    });
   }
 
   findOne(id: number) {
@@ -34,18 +42,6 @@ export class ProfileService {
         birth_date: true,
         gender: true,
         uuid: true
-      }
-    })
-  }
-
-  async findOneByUserId(userId: number){
-    return await this.prisma.profile.findUnique({
-      where: {
-        userId: userId
-      },
-      select: {
-        bio: true,
-        avatar: true
       }
     })
   }
@@ -100,7 +96,11 @@ export class ProfileService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
+  async remove(uuid: string) {
+    return await this.prisma.profile.delete({
+      where: {
+        uuid: uuid
+      }
+    });
   }
 }

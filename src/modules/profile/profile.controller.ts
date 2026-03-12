@@ -51,8 +51,8 @@ export class ProfileController {
     return this.profileService.update(uuid, updateProfileDto, imageUrl);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.profileService.remove(+id);
+  @Delete(':uuid')
+  remove(@Param('uuid') uuid: string) {
+    return this.profileService.remove(uuid);
   }
 }
