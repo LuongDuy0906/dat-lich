@@ -33,10 +33,10 @@ export class ProfileController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.USER)
   findOneByUserId(@Param('userId') userId: string){
-    return this.profileService.findOneByUserId(+userId);
+    return this.profileService.findOneByUserUuid(userId);
   }
 
-  @Patch(':id')
+  @Patch(':uuid')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.USER)
   @UseInterceptors(FileInterceptor('image', {
@@ -46,9 +46,9 @@ export class ProfileController {
     }),
     fileFilter: imageFileFilter,
   }))
-  update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto, @UploadedFile() file: Express.Multer.File) {
+  update(@Param('uuid') uuid: string, @Body() updateProfileDto: UpdateProfileDto, @UploadedFile() file: Express.Multer.File) {
     const imageUrl = `/uploads/products/${file.filename}`;
-    return this.profileService.update(+id, updateProfileDto, imageUrl);
+    return this.profileService.update(uuid, updateProfileDto, imageUrl);
   }
 
   @Delete(':id')

@@ -20,6 +20,24 @@ export class ProfileService {
     return `This action returns a #${id} profile`;
   }
 
+  findOneByUserUuid(uuid: string){
+    return this.prisma.profile.findFirst({
+      where: {
+        user: {
+          uuid: uuid
+        }
+      },
+      select: {
+        bio: true,
+        avatar: true,
+        address: true,
+        birth_date: true,
+        gender: true,
+        uuid: true
+      }
+    })
+  }
+
   async findOneByUserId(userId: number){
     return await this.prisma.profile.findUnique({
       where: {
@@ -32,10 +50,10 @@ export class ProfileService {
     })
   }
 
-  async update(id: number, updateProfileDto: UpdateProfileDto, imageUrl: string) {
+  async update(uuid: string, updateProfileDto: UpdateProfileDto, imageUrl: string) {
     const existProfile = await this.prisma.profile.findUnique({
       where: {
-        id: id
+        uuid: uuid
       }
     })
 
@@ -44,16 +62,26 @@ export class ProfileService {
     }
 
     let newProfile = {};
-    let url: string = imageUrl;
+    
     if(updateProfileDto.bio){
       newProfile['bio'] = updateProfileDto.bio;
+    }
+    if(updateProfileDto.address){
+      newProfile['address'] = updateProfileDto.address;
+    }
+    if(updateProfileDto.birth_date){
+      let dOB = new Date(updateProfileDto.birth_date);
+      newProfile['birth_date'] = dOB;
+    }
+    if(updateProfileDto.gender){
+      newProfile['gender'] = updateProfileDto.gender;
     }
     newProfile['avatar'] = imageUrl;
 
     try {
         await this.prisma.profile.update({
           where: {
-            id: id
+            uuid: uuid
           },
           data: {
             ...newProfile

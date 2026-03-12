@@ -2,9 +2,10 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Role, Status, User } from 'src/generated/prisma/client';
+import { Status, User } from 'src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
+import { UpdatePasswordDto } from '../profile/dto/update-password.dto';
 
 
 @Injectable()
@@ -36,14 +37,19 @@ export class UserService {
           profile: {
             create: {
               uuid: uuidv4(),
-              bio: createUserDto.phone
+              bio: createUserDto.phone,
+              status: Status.ACTIVE
             }
           }
+        },
+        include: {
+          profile: true
         }
       })
       
       return {
-        message: "Tạo người dùng thành công"
+        message: "Tạo người dùng thành công",
+        user: newUser
       }
     } catch (e){
       console.log(e);
@@ -58,34 +64,87 @@ export class UserService {
     return await this.prisma.user.findMany({
       select: {
         phone: true,
+        email: true,
         role: true,
+        profile: {
+          select: {
+            bio: true,
+            avatar: true
+          }
+        }
       }
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOneByUuid(uuid: string) {
+    return `This action returns a #${uuid} user`;
   }
 
-  findOneByPhone(phone: string){
+  findOneByPhoneWithoutPassword(phone: string){
     return this.prisma.user.findFirst({
       where: {
-        phone: phone
+        phone: phone,
+        deletedAt: null
       },
-      include: {
+      select: {
+        phone: true,
+        email: true,
+        role: true,
+        password: true,
+        profile: {
+          select: {
+            bio: true,
+            avatar: true
+          }
+        }
+      }
+    });
+  }
+
+  findOneByPhoneWithPassword(phone: string){
+    return this.prisma.user.findFirst({
+      where: {
+        phone: phone,
+      },
+      select: {
+        phone: true,
+        role: true,
+        password: true,
+        deletedAt: true,
+        uuid: true,
         profile: {
           select: {
             bio: true
           }
         }
       }
+    });
+  }
+
+  findOneByEmail(email: string){
+    return this.prisma.user.findUnique({
+      where: {
+        email: email,
+        deletedAt: null
+      },
+      select: {
+        phone: true,
+        email: true,
+        role: true,
+        profile: {
+          select: {
+            bio: true,
+            avatar: true
+          }
+        }
+      }
     })
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(uuid: string, updateUserDto: UpdateUserDto) {
     const existUser = await this.prisma.user.findUnique({
       where: {
-        id: id
+        uuid: uuid
       },
       select: {
         phone: true,
@@ -111,7 +170,7 @@ export class UserService {
 
     const updatedUser = await this.prisma.user.update({
       where: {
-        id: id
+        uuid: uuid
       },
       data:{
         ...newUser
@@ -121,15 +180,57 @@ export class UserService {
     return updatedUser;
   }
 
-  async remove(id: number) {
+  async updatePassword(uuid: string, updatePasswordDto: UpdatePasswordDto){
+    const existUser = await this.prisma.user.findUnique({
+      where: {
+        uuid: uuid
+      }
+    })
+
+    if(!existUser){
+      throw new NotFoundException("Khong tim thay nguoi dung");
+    }
+    
+    if(!bcrypt.compareSync(updatePasswordDto.recentPassword, existUser.password)){
+      throw new ConflictException("Mat khau khong trung khop");
+    }
+
+    const newPassword = await bcrypt.hash(updatePasswordDto.newPassword, 10);
+
+    return await this.prisma.user.update({
+      where: {
+        uuid: uuid
+      },
+      data: {
+        password: newPassword
+      }
+    })
+  }
+
+  async remove(uuid: string) {
+    const existUser = await this.prisma.user.findUnique({
+      where: {
+        uuid: uuid
+      }
+    })
+
+    if(!existUser){
+      throw new NotFoundException("Khong tim thay nguoi dung");
+    }
+
     const deletedAt = new Date();
 
     return await this.prisma.user.update({
       where: {
-        id: id
+        uuid: uuid
       },
       data: {
-        deletedAt: deletedAt
+        deletedAt: deletedAt,
+        profile: {
+          update: {
+            deletedAt: deletedAt
+          }
+        }
       }
     })
   }

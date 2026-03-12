@@ -16,8 +16,8 @@ datasource db {
 
 model User {
   id        Int       @id @default(autoincrement())
-  uuid      String
-  email     String
+  uuid      String    @unique
+  email     String    @unique
   phone     String    @unique
   password  String
   role      Role      @default(USER)
@@ -29,7 +29,7 @@ model User {
 
 model Profile {
   id         Int       @id @default(autoincrement())
-  uuid       String
+  uuid       String    @unique
   bio        String
   avatar     String?
   birth_date DateTime?

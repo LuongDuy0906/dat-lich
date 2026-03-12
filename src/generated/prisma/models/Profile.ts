@@ -297,11 +297,11 @@ export type ProfileOrderByWithRelationInput = {
 
 export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  uuid?: string
   userId?: number
   AND?: Prisma.ProfileWhereInput | Prisma.ProfileWhereInput[]
   OR?: Prisma.ProfileWhereInput[]
   NOT?: Prisma.ProfileWhereInput | Prisma.ProfileWhereInput[]
-  uuid?: Prisma.StringFilter<"Profile"> | string
   bio?: Prisma.StringFilter<"Profile"> | string
   avatar?: Prisma.StringNullableFilter<"Profile"> | string | null
   birth_date?: Prisma.DateTimeNullableFilter<"Profile"> | Date | string | null
@@ -312,7 +312,7 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Profile"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "userId">
+}, "id" | "uuid" | "userId">
 
 export type ProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
