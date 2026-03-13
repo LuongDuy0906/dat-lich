@@ -3,7 +3,10 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { RefreshAuthGuard } from './guards/refresh-auth/refresh-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags("auth")
+@ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -19,6 +22,7 @@ export class AuthController {
     }
 
     @Post('refresh')
+    @ApiBearerAuth()
     @UseGuards(RefreshAuthGuard)
     refresh(@Req() req){
       return this.authService.refreshToken(req.user.uuid, req.user.phone, req.user.role);

@@ -7,7 +7,10 @@ import { RolesGuard } from '../auth/guards/roles/roles.guard';
 import { Roles } from '../auth/decorators/role.decorator';
 import { Role } from 'src/generated/prisma/enums';
 import { SearchDto } from './dto/search.dto';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
+@ApiBearerAuth()
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -15,11 +18,15 @@ export class UserController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
+  @ApiOperation({summary: "API cho việc thêm mới user"})
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOperation({summary: "API lấy danh sách tất cả người dùng trên hệ thống"})
   findAll() {
     return this.userService.findAll();
   }
@@ -40,6 +47,9 @@ export class UserController {
   }
 
   @Patch(':uuid')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.USER)
+  @ApiOperation({summary: "Cập nhật thông tin người dùng"})
   update(@Param('uuid') uuid: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(uuid, updateUserDto);
   }

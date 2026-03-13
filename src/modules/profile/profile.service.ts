@@ -46,10 +46,12 @@ export class ProfileService {
     })
   }
 
-  async update(uuid: string, updateProfileDto: UpdateProfileDto, imageUrl: string) {
-    const existProfile = await this.prisma.profile.findUnique({
+  async update(uuid: string, updateProfileDto: UpdateProfileDto) {
+    const existProfile = await this.prisma.profile.findFirst({
       where: {
-        uuid: uuid
+        user:{
+          uuid: uuid
+        }
       }
     })
 
@@ -72,12 +74,11 @@ export class ProfileService {
     if(updateProfileDto.gender){
       newProfile['gender'] = updateProfileDto.gender;
     }
-    newProfile['avatar'] = imageUrl;
 
     try {
         await this.prisma.profile.update({
           where: {
-            uuid: uuid
+            id: existProfile.id
           },
           data: {
             ...newProfile
@@ -94,6 +95,29 @@ export class ProfileService {
         error: error
       }
     }
+  }
+
+  async updateAvatar(uuid: string, imageUrl: string){
+    const existProfile = await this.prisma.profile.findFirst({
+      where: {
+        user: {
+          uuid: uuid
+        }
+      }
+    })
+
+    if(!existProfile){
+      throw new NotFoundException("Khong tim thay ho so nguoi dung")
+    }
+
+    return await this.prisma.profile.update({
+      where: {
+        id: existProfile.id
+      },
+      data: {
+        avatar: imageUrl
+      }
+    })
   }
 
   async remove(uuid: string) {
