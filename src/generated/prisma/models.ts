@@ -10,4 +10,7 @@
  */
 export type * from './models/User.js'
 export type * from './models/Profile.js'
+export type * from './models/RoomType.js'
+export type * from './models/Floor.js'
+export type * from './models/Room.js'
 export type * from './commonInputTypes.js'

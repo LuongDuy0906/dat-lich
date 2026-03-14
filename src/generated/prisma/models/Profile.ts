@@ -44,7 +44,7 @@ export type ProfileMinAggregateOutputType = {
   birth_date: Date | null
   gender: string | null
   address: string | null
-  status: $Enums.Status | null
+  status: $Enums.UserStatus | null
   userId: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -59,7 +59,7 @@ export type ProfileMaxAggregateOutputType = {
   birth_date: Date | null
   gender: string | null
   address: string | null
-  status: $Enums.Status | null
+  status: $Enums.UserStatus | null
   userId: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -233,7 +233,7 @@ export type ProfileGroupByOutputType = {
   birth_date: Date | null
   gender: string | null
   address: string | null
-  status: $Enums.Status
+  status: $Enums.UserStatus
   userId: number
   createdAt: Date
   updatedAt: Date
@@ -271,7 +271,7 @@ export type ProfileWhereInput = {
   birth_date?: Prisma.DateTimeNullableFilter<"Profile"> | Date | string | null
   gender?: Prisma.StringNullableFilter<"Profile"> | string | null
   address?: Prisma.StringNullableFilter<"Profile"> | string | null
-  status?: Prisma.EnumStatusFilter<"Profile"> | $Enums.Status
+  status?: Prisma.EnumUserStatusFilter<"Profile"> | $Enums.UserStatus
   userId?: Prisma.IntFilter<"Profile"> | number
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
@@ -307,7 +307,7 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   birth_date?: Prisma.DateTimeNullableFilter<"Profile"> | Date | string | null
   gender?: Prisma.StringNullableFilter<"Profile"> | string | null
   address?: Prisma.StringNullableFilter<"Profile"> | string | null
-  status?: Prisma.EnumStatusFilter<"Profile"> | $Enums.Status
+  status?: Prisma.EnumUserStatusFilter<"Profile"> | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Profile"> | Date | string | null
@@ -345,7 +345,7 @@ export type ProfileScalarWhereWithAggregatesInput = {
   birth_date?: Prisma.DateTimeNullableWithAggregatesFilter<"Profile"> | Date | string | null
   gender?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
-  status?: Prisma.EnumStatusWithAggregatesFilter<"Profile"> | $Enums.Status
+  status?: Prisma.EnumUserStatusWithAggregatesFilter<"Profile"> | $Enums.UserStatus
   userId?: Prisma.IntWithAggregatesFilter<"Profile"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
@@ -359,7 +359,7 @@ export type ProfileCreateInput = {
   birth_date?: Date | string | null
   gender?: string | null
   address?: string | null
-  status?: $Enums.Status
+  status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -374,7 +374,7 @@ export type ProfileUncheckedCreateInput = {
   birth_date?: Date | string | null
   gender?: string | null
   address?: string | null
-  status?: $Enums.Status
+  status?: $Enums.UserStatus
   userId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -388,7 +388,7 @@ export type ProfileUpdateInput = {
   birth_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -403,7 +403,7 @@ export type ProfileUncheckedUpdateInput = {
   birth_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -418,7 +418,7 @@ export type ProfileCreateManyInput = {
   birth_date?: Date | string | null
   gender?: string | null
   address?: string | null
-  status?: $Enums.Status
+  status?: $Enums.UserStatus
   userId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -432,7 +432,7 @@ export type ProfileUpdateManyMutationInput = {
   birth_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -446,7 +446,7 @@ export type ProfileUncheckedUpdateManyInput = {
   birth_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -549,8 +549,8 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
-export type EnumStatusFieldUpdateOperationsInput = {
-  set?: $Enums.Status
+export type EnumUserStatusFieldUpdateOperationsInput = {
+  set?: $Enums.UserStatus
 }
 
 export type ProfileCreateWithoutUserInput = {
@@ -560,7 +560,7 @@ export type ProfileCreateWithoutUserInput = {
   birth_date?: Date | string | null
   gender?: string | null
   address?: string | null
-  status?: $Enums.Status
+  status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -574,7 +574,7 @@ export type ProfileUncheckedCreateWithoutUserInput = {
   birth_date?: Date | string | null
   gender?: string | null
   address?: string | null
-  status?: $Enums.Status
+  status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -603,7 +603,7 @@ export type ProfileUpdateWithoutUserInput = {
   birth_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -617,7 +617,7 @@ export type ProfileUncheckedUpdateWithoutUserInput = {
   birth_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -712,7 +712,7 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     birth_date: Date | null
     gender: string | null
     address: string | null
-    status: $Enums.Status
+    status: $Enums.UserStatus
     userId: number
     createdAt: Date
     updatedAt: Date
@@ -1148,7 +1148,7 @@ export interface ProfileFieldRefs {
   readonly birth_date: Prisma.FieldRef<"Profile", 'DateTime'>
   readonly gender: Prisma.FieldRef<"Profile", 'String'>
   readonly address: Prisma.FieldRef<"Profile", 'String'>
-  readonly status: Prisma.FieldRef<"Profile", 'Status'>
+  readonly status: Prisma.FieldRef<"Profile", 'UserStatus'>
   readonly userId: Prisma.FieldRef<"Profile", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Profile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Profile", 'DateTime'>

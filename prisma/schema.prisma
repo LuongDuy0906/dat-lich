@@ -28,19 +28,57 @@ model User {
 }
 
 model Profile {
-  id         Int       @id @default(autoincrement())
-  uuid       String    @unique
+  id         Int        @id @default(autoincrement())
+  uuid       String     @unique
   bio        String
   avatar     String?
   birth_date DateTime?
   gender     String?
   address    String?
-  status     Status    @default(ACTIVE)
-  userId     Int       @unique
-  user       User      @relation(fields: [userId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  status     UserStatus @default(ACTIVE)
+  userId     Int        @unique
+  user       User       @relation(fields: [userId], references: [id])
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
   deletedAt  DateTime?
+}
+
+model RoomType {
+  id          Int       @id @default(autoincrement())
+  uuid        String    @unique
+  name        String    @unique
+  description String?
+  price       Decimal
+  rooms       Room[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+}
+
+model Floor {
+  id        Int       @id @default(autoincrement())
+  uuid      String    @unique
+  name      String    @unique
+  capacity  Int
+  room      Room[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Room {
+  id          Int        @id @default(autoincrement())
+  uuid        String     @unique
+  name        String     @unique
+  description String?
+  status      RoomStatus @default(MAINTENANCE)
+  typeId      Int
+  roomType    RoomType   @relation(fields: [typeId], references: [id])
+  floorId     Int
+  floor       Floor      @relation(fields: [floorId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?
 }
 
 enum Role {
@@ -51,8 +89,15 @@ enum Role {
   NURSE
 }
 
-enum Status {
+enum UserStatus {
   ACTIVE
   INACTIVE
   BANNED
+}
+
+enum RoomStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  OCCUPIED
 }

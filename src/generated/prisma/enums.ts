@@ -20,10 +20,20 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
-export const Status = {
+export const UserStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
   BANNED: 'BANNED'
 } as const
 
-export type Status = (typeof Status)[keyof typeof Status]
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const RoomStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  MAINTENANCE: 'MAINTENANCE',
+  OCCUPIED: 'OCCUPIED'
+} as const
+
+export type RoomStatus = (typeof RoomStatus)[keyof typeof RoomStatus]
