@@ -1,26 +1,104 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateRoomTypeDto } from './dto/create-room-type.dto';
 import { UpdateRoomTypeDto } from './dto/update-room-type.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class RoomTypesService {
-  create(createRoomTypeDto: CreateRoomTypeDto) {
-    return 'This action adds a new roomType';
+  constructor(private readonly prisma: PrismaService){}
+
+  async create(createRoomTypeDto: CreateRoomTypeDto) {
+    const existRoomType = await this.prisma.roomType.findUnique({
+      where: {
+        name: createRoomTypeDto.name
+      },
+      select: {
+        name: true
+      }
+    })
+
+    if(existRoomType){
+      throw new ConflictException("Loai phong da ton tai");
+    }
+
+    return await this.prisma.roomType.create({
+      data: {
+        uuid: v4(),
+        name: createRoomTypeDto.name,
+        price: createRoomTypeDto.price,
+        description: createRoomTypeDto.description
+      }
+    });
   }
 
-  findAll() {
-    return `This action returns all roomTypes`;
+  async findAll() {
+    return await this.prisma.roomType.findMany({
+      select: {
+        name: true,
+        price: true,
+        description: true
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} roomType`;
+  async findOne(uuid: string) {
+    return await this.prisma.roomType.findUnique({
+      where: {
+        uuid: uuid
+      },
+      select: {
+        name: true,
+        price: true
+      }
+    });
   }
 
-  update(id: number, updateRoomTypeDto: UpdateRoomTypeDto) {
-    return `This action updates a #${id} roomType`;
+  async update(uuid: string, updateRoomTypeDto: UpdateRoomTypeDto) {
+    const existUser = await this.prisma.roomType.findUnique({
+      where: {
+        name: updateRoomTypeDto.name
+      },
+      select: {
+        name: true
+      }
+    })
+
+    if(existUser){
+      throw new ConflictException("Loai phong da ton tai")
+    }
+
+    const newRoomType = {}
+    if(updateRoomTypeDto.name){
+      newRoomType['name'] = updateRoomTypeDto.name;
+    }
+    if(updateRoomTypeDto.price){
+      newRoomType['price'] = updateRoomTypeDto.price;
+    }
+    if(updateRoomTypeDto.description){
+      newRoomType['description'] = updateRoomTypeDto.description;
+    }
+
+    return await this.prisma.roomType.update({
+      where: {
+        uuid: uuid
+      },
+      data: {
+        ...newRoomType
+      }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} roomType`;
+  async remove(uuid: string) {
+    const date = new Date();
+
+    return await this.prisma.roomType.update({
+      where: {
+        uuid: uuid
+      },
+      data: {
+        deletedAt: date
+      }
+    });
   }
 }

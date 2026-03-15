@@ -2,7 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Status, User } from 'src/generated/prisma/client';
+import { UserStatus, User } from 'src/generated/prisma/client';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdatePasswordDto } from '../profile/dto/update-password.dto';
@@ -38,7 +38,7 @@ export class UserService {
             create: {
               uuid: uuidv4(),
               bio: createUserDto.phone,
-              status: Status.ACTIVE
+              status: UserStatus.ACTIVE
             }
           }
         },

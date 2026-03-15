@@ -17,18 +17,18 @@ export class RoomTypesController {
     return this.roomTypesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roomTypesService.findOne(+id);
+  @Get(':uuid')
+  findOne(@Param('uuid') uuid: string) {
+    return this.roomTypesService.findOne(uuid);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoomTypeDto: UpdateRoomTypeDto) {
-    return this.roomTypesService.update(+id, updateRoomTypeDto);
+  @Patch(':uuid')
+  update(@Param('uuid') uuid: string, @Body() updateRoomTypeDto: UpdateRoomTypeDto) {
+    return this.roomTypesService.update(uuid, updateRoomTypeDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.roomTypesService.remove(+id);
+  @Delete(':uuid')
+  remove(@Param('uuid') uuid: string) {
+    return this.roomTypesService.remove(uuid);
   }
 }

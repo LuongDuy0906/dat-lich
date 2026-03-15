@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { RoomModule } from './modules/room/room.module';
 import { RoomTypesModule } from './modules/room-types/room-types.module';
+import { FloorModule } from './modules/floor/floor.module';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { RoomTypesModule } from './modules/room-types/room-types.module';
     UserModule, 
     ConfigModule.forRoot({
       isGlobal: true,
-    }), AuthModule, ProfileModule, RoomModule, RoomTypesModule
+    }), AuthModule, ProfileModule, RoomModule, RoomTypesModule, FloorModule
   ],
   controllers: [AppController],
   providers: [AppService],
